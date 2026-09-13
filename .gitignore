@@ -1,0 +1,38 @@
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.idea/
+**/.vscode/
+
+# Python environments, caches, and generated files
+**/venv/
+**/.venv/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+
+# Node dependencies and build output
+**/node_modules/
+**/.vite/
+**/dist/
+**/marketing-dist/
+**/marketing-standalone/
+
+# Local secrets and environment overrides
+**/.env
+**/.env.*
+!**/.env.example
+
+# Local datasets and generated ML artifacts
+智能健康测评/backend/data/tongue_dataset/
+智能健康测评/backend/data/tcm_tongue/
+智能健康测评/backend/data/tcm_tongue_raw/
+智能健康测评/backend/backups/
+智能健康测评/backend/eval_out/
+智能健康测评/backend/runs/
+智能健康测评/_imgtest/
+
+# Local test/cache state
+智能健康测评/.pytest_cache/

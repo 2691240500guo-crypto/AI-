@@ -1,0 +1,6 @@
+# Copy to backend/data/tongue.yaml after placing your YOLO dataset.
+path: ./tongue_dataset
+train: images/train
+val: images/val
+names:
+  0: tongue

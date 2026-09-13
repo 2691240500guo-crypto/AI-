@@ -1,0 +1,20 @@
+path: D:/项目阶段/项目实操/智能健康测评/backend/data/tcm_tongue
+train: train/images
+val: val/images
+test: test/images
+
+names:
+  0: baitaishe
+  1: botaishe
+  2: chihenshe
+  3: gandanao
+  4: hongdianshe
+  5: hongshe
+  6: huangtaishe
+  7: huataishe
+  8: liewenshe
+  9: pangdashe
+  10: shenquao
+  11: shoushe
+  12: xinfeiao
+  13: zishe

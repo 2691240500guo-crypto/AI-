@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>HealthyBot 系统框架图</title>
+<style>
+  body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #2b2f2a; background: #f6f7f4; margin: 0; padding: 32px 20px 80px; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  h1 { font-size: 26px; border-bottom: 3px solid #526d4e; padding-bottom: 10px; }
+  h2 { font-size: 19px; color: #3d5239; margin-top: 40px; border-left: 5px solid #526d4e; padding-left: 12px; }
+  .meta { color: #77806f; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  th { background: #e8efe4; color: #33502f; text-align: left; padding: 9px 10px; border: 1px solid #d5ded0; }
+  td { padding: 8px 10px; border: 1px solid #e3e8df; vertical-align: top; line-height: 1.6; }
+  code { background: #ecefe9; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  pre.tree { background: #fff; border: 1px solid #dbe2d6; border-radius: 8px; padding: 16px 18px; font-size: 12.5px; line-height: 1.75; overflow-x: auto; font-family: Consolas, "Courier New", monospace; color: #33402c; }
+  .card { overflow-x: auto; background: #fff; border-radius: 10px; padding: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.07); }
+  .callout { background: #eef4ea; border: 1px solid #c8d8bf; border-radius: 8px; padding: 12px 16px; font-size: 13px; line-height: 1.7; margin: 12px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>HealthyBot 智能健康测评 · 系统框架图</h1>
+<p class="meta">分层架构视图 · 依据源码 main.py / core / routers / services / utils 目录实况绘制 · 2026-09-12</p>
+
+<div class="card">
+<svg viewBox="0 0 1080 716" width="100%" role="img" xmlns="http://www.w3.org/2000/svg" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#7d8776" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- L1 展示层 -->
+  <text x="42" y="50" font-size="13" font-weight="700" fill="#3d5239">① 展示层 · 客户端</text>
+  <g>
+    <rect x="40" y="56" width="235" height="76" rx="10" fill="#f1efe8" stroke="#888780" stroke-width="1"/>
+    <text x="157" y="86" text-anchor="middle" font-size="14" font-weight="700" fill="#2c2c2a">Vue 3 SPA</text>
+    <text x="157" y="108" text-anchor="middle" font-size="11" fill="#5f5e5a">Vite 开发服务器 :5173</text>
+    <text x="157" y="124" text-anchor="middle" font-size="11" fill="#5f5e5a">14 个页面组件</text>
+
+    <rect x="295" y="56" width="235" height="76" rx="10" fill="#f1efe8" stroke="#888780" stroke-width="1"/>
+    <text x="412" y="86" text-anchor="middle" font-size="14" font-weight="700" fill="#2c2c2a">api.js 统一请求层</text>
+    <text x="412" y="108" text-anchor="middle" font-size="11" fill="#5f5e5a">axios 封装 · 自动带 token</text>
+    <text x="412" y="124" text-anchor="middle" font-size="11" fill="#5f5e5a">统一错误与 428 处理</text>
+
+    <rect x="550" y="56" width="235" height="76" rx="10" fill="#f1efe8" stroke="#888780" stroke-width="1"/>
+    <text x="667" y="86" text-anchor="middle" font-size="14" font-weight="700" fill="#2c2c2a">ECharts 可视化</text>
+    <text x="667" y="108" text-anchor="middle" font-size="11" fill="#5f5e5a">theme-deep 深浅色主题</text>
+    <text x="667" y="124" text-anchor="middle" font-size="11" fill="#5f5e5a">图谱 / 报告 / 测评图表</text>
+
+    <rect x="805" y="56" width="235" height="76" rx="10" fill="#f1efe8" stroke="#888780" stroke-width="1"/>
+    <text x="922" y="86" text-anchor="middle" font-size="14" font-weight="700" fill="#2c2c2a">主题 / 状态管理</text>
+    <text x="922" y="108" text-anchor="middle" font-size="11" fill="#5f5e5a">theme-mode 暗色切换</text>
+    <text x="922" y="124" text-anchor="middle" font-size="11" fill="#5f5e5a">localStorage 登录态</text>
+  </g>
+  <path d="M540 132 L540 162" stroke="#7d8776" stroke-width="1.6" marker-end="url(#ar)" marker-start="url(#ar)"/>
+  <text x="552" y="152" font-size="11" fill="#6a7365">HTTP / JSON（Bearer Token）</text>
+
+  <!-- L2 接入层 -->
+  <text x="42" y="158" font-size="13" font-weight="700" fill="#712b13">② 接入层 · FastAPI 入口</text>
+  <g>
+    <rect x="40" y="162" width="235" height="76" rx="10" fill="#faece7" stroke="#993c1d" stroke-width="1"/>
+    <text x="157" y="188" text-anchor="middle" font-size="14" font-weight="700" fill="#712b13">main.py</text>
+    <text x="157" y="209" text-anchor="middle" font-size="11" fill="#993c1d">lifespan 启动钩子</text>
+    <text x="157" y="225" text-anchor="middle" font-size="11" fill="#993c1d">init_db 建表 + 图谱灌入</text>
+
+    <rect x="295" y="162" width="235" height="76" rx="10" fill="#faece7" stroke="#993c1d" stroke-width="1"/>
+    <text x="412" y="188" text-anchor="middle" font-size="14" font-weight="700" fill="#712b13">JWT 鉴权中间件</text>
+    <text x="412" y="209" text-anchor="middle" font-size="11" fill="#993c1d">统一校验 token</text>
+    <text x="412" y="225" text-anchor="middle" font-size="11" fill="#993c1d">管理员白名单 _need_admin</text>
+
+    <rect x="550" y="162" width="235" height="76" rx="10" fill="#faece7" stroke="#993c1d" stroke-width="1"/>
+    <text x="667" y="188" text-anchor="middle" font-size="14" font-weight="700" fill="#712b13">健康数据授权闸门</text>
+    <text x="667" y="209" text-anchor="middle" font-size="11" fill="#993c1d">require_health_consent</text>
+    <text x="667" y="225" text-anchor="middle" font-size="11" fill="#993c1d">未授权 → 428</text>
+
+    <rect x="805" y="162" width="235" height="76" rx="10" fill="#faece7" stroke="#993c1d" stroke-width="1"/>
+    <text x="922" y="188" text-anchor="middle" font-size="14" font-weight="700" fill="#712b13">统一响应 / 异常</text>
+    <text x="922" y="209" text-anchor="middle" font-size="11" fill="#993c1d">ApiResponse 包装</text>
+    <text x="922" y="225" text-anchor="middle" font-size="11" fill="#993c1d">字段级加密 data_protection</text>
+  </g>
+  <path d="M540 238 L540 268" stroke="#7d8776" stroke-width="1.6" marker-end="url(#ar)" marker-start="url(#ar)"/>
+  <text x="552" y="258" font-size="11" fill="#6a7365">路由分发 · 依赖注入 get_db</text>
+
+  <!-- L3 业务层 -->
+  <text x="42" y="264" font-size="13" font-weight="700" fill="#0c447c">③ 业务路由层 · routers（9 个模块）</text>
+  <g font-size="12.5" font-weight="700" text-anchor="middle">
+    <rect x="40" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="90" y="300" fill="#0c447c">测评</text><text x="90" y="320" font-size="10" font-weight="400" fill="#185fa5">/assessment</text><text x="90" y="336" font-size="10" font-weight="400" fill="#185fa5">NRS2002</text>
+    <rect x="151" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="201" y="300" fill="#0c447c">知识库</text><text x="201" y="320" font-size="10" font-weight="400" fill="#185fa5">/knowledge</text><text x="201" y="336" font-size="10" font-weight="400" fill="#185fa5">上传检索</text>
+    <rect x="262" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="312" y="300" fill="#0c447c">图谱</text><text x="312" y="320" font-size="10" font-weight="400" fill="#185fa5">/graph</text><text x="312" y="336" font-size="10" font-weight="400" fill="#185fa5">查询推理</text>
+    <rect x="373" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="423" y="300" fill="#0c447c">AI 问答</text><text x="423" y="320" font-size="10" font-weight="400" fill="#185fa5">/assistant</text><text x="423" y="336" font-size="10" font-weight="400" fill="#185fa5">LangGraph 入口</text>
+    <rect x="484" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="534" y="300" fill="#0c447c">记饮食</text><text x="534" y="320" font-size="10" font-weight="400" fill="#185fa5">/meals</text><text x="534" y="336" font-size="10" font-weight="400" fill="#185fa5">拍照 / 文本</text>
+    <rect x="595" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="645" y="300" fill="#0c447c">产品 / 社交</text><text x="645" y="320" font-size="10" font-weight="400" fill="#185fa5">/product</text><text x="645" y="336" font-size="10" font-weight="400" fill="#185fa5">计划·社区·舌象</text>
+    <rect x="706" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="756" y="300" fill="#0c447c">运营总览</text><text x="756" y="320" font-size="10" font-weight="400" fill="#185fa5">/admin</text><text x="756" y="336" font-size="10" font-weight="400" fill="#185fa5">聚合 + 审核</text>
+    <rect x="817" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="867" y="300" fill="#0c447c">隐私合规</text><text x="867" y="320" font-size="10" font-weight="400" fill="#185fa5">/privacy</text><text x="867" y="336" font-size="10" font-weight="400" fill="#185fa5">授权导出删除</text>
+    <rect x="928" y="268" width="100" height="88" rx="8" fill="#e6f1fb" stroke="#185fa5" stroke-width="1"/>
+    <text x="978" y="300" fill="#0c447c">报告陪护</text><text x="978" y="320" font-size="10" font-weight="400" fill="#185fa5">/reports /pet</text><text x="978" y="336" font-size="10" font-weight="400" fill="#185fa5">周报月报</text>
+  </g>
+  <path d="M540 356 L540 386" stroke="#7d8776" stroke-width="1.6" marker-end="url(#ar)" marker-start="url(#ar)"/>
+  <text x="552" y="376" font-size="11" fill="#6a7365">services 业务逻辑层（rules → services → utils 单向依赖）</text>
+
+  <!-- L4 编排层 -->
+  <text x="42" y="382" font-size="13" font-weight="700" fill="#3c3489">④ AI 编排与能力层 · services</text>
+  <g>
+    <rect x="40" y="386" width="235" height="88" rx="10" fill="#eeedfe" stroke="#534ab7" stroke-width="1"/>
+    <text x="157" y="412" text-anchor="middle" font-size="14" font-weight="700" fill="#3c3489">LangGraph 有界状态机</text>
+    <text x="157" y="433" text-anchor="middle" font-size="11" fill="#534ab7">route_agents 路由 → 动态建图</text>
+    <text x="157" y="451" text-anchor="middle" font-size="11" fill="#534ab7">4 Agent 顺序接力 · handoff</text>
+    <text x="157" y="468" text-anchor="middle" font-size="11" fill="#534ab7">≤4 步 · 全程留痕可回放</text>
+
+    <rect x="295" y="386" width="235" height="88" rx="10" fill="#eeedfe" stroke="#534ab7" stroke-width="1"/>
+    <text x="412" y="412" text-anchor="middle" font-size="14" font-weight="700" fill="#3c3489">RAG 融合器</text>
+    <text x="412" y="433" text-anchor="middle" font-size="11" fill="#534ab7">Milvus top5 片段（模糊知识）</text>
+    <text x="412" y="451" text-anchor="middle" font-size="11" fill="#534ab7">Neo4j reason_path（确定规则）</text>
+    <text x="412" y="468" text-anchor="middle" font-size="11" fill="#534ab7">冲突时图谱结论优先</text>
+
+    <rect x="550" y="386" width="235" height="88" rx="10" fill="#eeedfe" stroke="#534ab7" stroke-width="1"/>
+    <text x="667" y="412" text-anchor="middle" font-size="14" font-weight="700" fill="#3c3489">NRS2002 规则引擎</text>
+    <text x="667" y="433" text-anchor="middle" font-size="11" fill="#534ab7">纯 Python 确定性打分</text>
+    <text x="667" y="451" text-anchor="middle" font-size="11" fill="#534ab7">风险分级 · 可解释可复现</text>
+    <text x="667" y="468" text-anchor="middle" font-size="11" fill="#534ab7">LLM 仅做报告润色</text>
+
+    <rect x="805" y="386" width="235" height="88" rx="10" fill="#eeedfe" stroke="#534ab7" stroke-width="1"/>
+    <text x="922" y="412" text-anchor="middle" font-size="14" font-weight="700" fill="#3c3489">多模态解析</text>
+    <text x="922" y="433" text-anchor="middle" font-size="11" fill="#534ab7">文档解析 / 切分 / 向量化</text>
+    <text x="922" y="451" text-anchor="middle" font-size="11" fill="#534ab7">图片 OCR · 菜品识别 · 机审</text>
+    <text x="922" y="468" text-anchor="middle" font-size="11" fill="#534ab7">语音转写与合成</text>
+  </g>
+  <path d="M540 474 L540 504" stroke="#7d8776" stroke-width="1.6" marker-end="url(#ar)" marker-start="url(#ar)"/>
+  <text x="552" y="494" font-size="11" fill="#6a7365">model client 统一出口（唯一 LLM 网关）</text>
+
+  <!-- L5 模型层 -->
+  <text x="42" y="500" font-size="13" font-weight="700" fill="#633806">⑤ 模型服务层</text>
+  <g>
+    <rect x="40" y="504" width="640" height="76" rx="10" fill="#faeeda" stroke="#ba7517" stroke-width="1"/>
+    <text x="360" y="528" text-anchor="middle" font-size="14" font-weight="700" fill="#633806">SiliconFlow 云端（OpenAI 兼容协议 · 单点封装 llm_client.py）</text>
+    <text x="360" y="550" text-anchor="middle" font-size="11" fill="#854f0b">DeepSeek-V4-Flash 对话 / 报告 · bge-m3 向量(1024维) · Qwen3-VL 视觉 · DeepSeek-OCR · SenseVoice 语音识别 · CosyVoice2 语音合成</text>
+    <text x="360" y="568" text-anchor="middle" font-size="11" fill="#854f0b">API Key 来自 backend/.env，密钥不入库、不入日志</text>
+
+    <rect x="700" y="504" width="340" height="76" rx="10" fill="#faeeda" stroke="#ba7517" stroke-width="1"/>
+    <text x="870" y="530" text-anchor="middle" font-size="14" font-weight="700" fill="#633806">本地模型（离线推理）</text>
+    <text x="870" y="551" text-anchor="middle" font-size="11" fill="#854f0b">YOLOv8n 舌象 14 类特征检测</text>
+    <text x="870" y="568" text-anchor="middle" font-size="11" fill="#854f0b">带可信度分档闸门 · 非诊断口径</text>
+  </g>
+  <path d="M540 580 L540 610" stroke="#7d8776" stroke-width="1.6" marker-end="url(#ar)" marker-start="url(#ar)"/>
+  <text x="552" y="600" font-size="11" fill="#6a7365">utils 数据访问客户端（各自单例 get_xxx）</text>
+
+  <!-- L6 数据层 -->
+  <text x="42" y="606" font-size="13" font-weight="700" fill="#27500a">⑥ 数据与存储层</text>
+  <g text-anchor="middle">
+    <rect x="40" y="610" width="188" height="76" rx="10" fill="#eaf3de" stroke="#639922" stroke-width="1"/>
+    <text x="134" y="636" font-size="14" font-weight="700" fill="#27500a">MySQL</text>
+    <text x="134" y="657" font-size="11" fill="#3b6d11">health_assessment · 15 张表</text>
+    <text x="134" y="674" font-size="11" fill="#3b6d11">敏感字段 AES-256-GCM</text>
+
+    <rect x="243" y="610" width="188" height="76" rx="10" fill="#eaf3de" stroke="#639922" stroke-width="1"/>
+    <text x="337" y="636" font-size="14" font-weight="700" fill="#27500a">MinIO</text>
+    <text x="337" y="657" font-size="11" fill="#3b6d11">知识库原件 / 社区图床</text>
+    <text x="337" y="674" font-size="11" fill="#3b6d11">舌象私有加密桶</text>
+
+    <rect x="446" y="610" width="188" height="76" rx="10" fill="#eaf3de" stroke="#639922" stroke-width="1"/>
+    <text x="540" y="636" font-size="14" font-weight="700" fill="#27500a">Milvus</text>
+    <text x="540" y="657" font-size="11" fill="#3b6d11">knowledge_chunks</text>
+    <text x="540" y="674" font-size="11" fill="#3b6d11">IVF_FLAT + COSINE</text>
+
+    <rect x="649" y="610" width="188" height="76" rx="10" fill="#eaf3de" stroke="#639922" stroke-width="1"/>
+    <text x="743" y="636" font-size="14" font-weight="700" fill="#27500a">Neo4j</text>
+    <text x="743" y="657" font-size="11" fill="#3b6d11">Food / Nutrient / Disease</text>
+    <text x="743" y="674" font-size="11" fill="#3b6d11">5 类关系 · 可多跳推理</text>
+
+    <rect x="852" y="610" width="188" height="76" rx="10" fill="#eaf3de" stroke="#639922" stroke-width="1"/>
+    <text x="946" y="636" font-size="14" font-weight="700" fill="#27500a">Redis</text>
+    <text x="946" y="657" font-size="11" fill="#3b6d11">报告 120s / 图谱 60-90s</text>
+    <text x="946" y="674" font-size="11" fill="#3b6d11">运营总览 15s 缓存</text>
+  </g>
+</svg>
+</div>
+
+<h2>分层职责与关键约定</h2>
+<table>
+  <tr><th style="width:150px">层</th><th>职责</th><th style="width:270px">关键约定 / 易踩坑</th></tr>
+  <tr><td><b>① 展示层</b></td><td>页面渲染、请求封装、图表与主题<br>14 个页面组件</td><td>颜色只用 CSS 变量（<code>var(--ink/--card/--primary)</code>），硬编码 <code>#fff</code> 会让深色模式发白</td></tr>
+  <tr><td><b>② 接入层</b></td><td>启动钩子（建表 + 图谱幂等灌入）、JWT 校验、健康数据授权闸门、统一响应</td><td>授权接口是 <code>PUT /api/privacy/consent</code>（不是 POST）；未授权时业务接口返回 428 属设计而非 bug</td></tr>
+  <tr><td><b>③ 业务路由层</b></td><td>9 个路由模块，仅做参数校验与编排调用，业务逻辑下沉 services</td><td>改数据库结构走 ORM 模型 + <code>init_db()</code> 自动建表，项目无独立 SQL 文件</td></tr>
+  <tr><td><b>④ AI 编排层</b></td><td>LangGraph 有界状态机、RAG 双源融合、规则引擎打分、多模态解析</td><td>「先规划后执行」：路由在进图前完成，图内一条直线，最多 4 步；图谱结论与知识库片段冲突时<b>图谱优先</b></td></tr>
+  <tr><td><b>⑤ 模型服务层</b></td><td>云端六模型 + 本地 YOLO，全部经单点客户端调用</td><td>LLM 单一出口 <code>llm_client.py</code>，各调用点都有本地兜底（模板/词表/规则），保证不白屏</td></tr>
+  <tr><td><b>⑥ 数据层</b></td><td>MySQL 业务数据、MinIO 文件、Milvus 向量、Neo4j 图谱、Redis 缓存</td><td>向量库与图谱<b>互不写入</b>，只在 prompt 层融合；图谱数据人工预置 + 幂等 MERGE，加一条边即刻生效</td></tr>
+</table>
+
+<h2>后端目录结构（backend/app）</h2>
+<pre class="tree">backend/
+├── .env                      # 全部连接配置与密钥（SILICONFLOW_API_KEY 等）
+├── app/
+│   ├── main.py               # FastAPI 入口：9 路由挂载 + lifespan 启动钩子
+│   ├── core/
+│   │   ├── config.py         # Settings 读 .env（db_url / 模型名 / collection）
+│   │   ├── database.py       # engine / SessionLocal / get_db / init_db
+│   │   ├── security.py       # JWT 签发校验 + 演示账号
+│   │   └── data_protection.py# AES-256-GCM 字段级加密（EncryptedText/JSON）
+│   ├── models/               # SQLAlchemy ORM：15 张表定义
+│   ├── schemas/              # Pydantic 请求/响应模型
+│   ├── routers/              # ③ 业务路由层（9 个模块）
+│   │   ├── assessment.py  knowledge.py  graph.py  assistant.py
+│   │   ├── meals.py       product.py    admin.py  privacy.py  companion.py
+│   ├── services/             # ④ 业务与 AI 逻辑层
+│   │   ├── assistant_service.py   # ★ LangGraph 编排 + RAG 融合
+│   │   ├── llm_client.py          # ★ SiliconFlow 单点出口
+│   │   ├── plan_service.py        # 饮食计划 + 禁忌校验
+│   │   ├── meal_service.py        # 记饮食（视觉/文本抽取）
+│   │   ├── tongue_service.py      # 舌象（YOLO + 可信度闸门）
+│   │   ├── knowledge_service.py   # 知识库入库流水线
+│   │   ├── report_service.py      # 周报/月报聚合
+│   │   ├── moderation_service.py  # 社区机审
+│   │   ├── nrs2002_engine.py      # 纯规则打分引擎
+│   │   └── privacy_service.py     # 授权 / 导出 / 删除
+│   └── utils/                # ⑤⑥ 数据访问客户端（单例 get_xxx）
+│       ├── minio_client.py   milvus_client.py
+│       ├── neo4j_client.py   redis_cache.py
+└── data/                     # 舌象数据集（非业务库）
+</pre>
+
+<h2>一句话读懂这张图</h2>
+<div class="callout">
+请求从左上角进来，沿着六层**单向向下**：前端 → 接入层校验（JWT + 授权）→ 业务路由 → AI 编排（LangGraph + RAG + 规则引擎）→ 模型服务（云端 LLM / 本地 YOLO）→ 数据层五种存储。<br>
+反向只有一条路：结果沿原路回传，同时把「谁答的、查了什么」写进 MySQL 留痕表。<br>
+<b>架构关键词：分层单向依赖、AI 能力单点封装、双知识源 prompt 层融合、每个 LLM 调用点都有本地兜底。</b>
+</div>
+</div>
+</body>
+</html>

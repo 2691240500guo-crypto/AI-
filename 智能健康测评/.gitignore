@@ -1,0 +1,23 @@
+# Secrets and local configuration
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Local runtimes and generated artifacts
+backend/venv/
+backend/runs/
+backend/backups/
+backend/**/__pycache__/
+backend/.pytest_cache/
+frontend/node_modules/
+frontend/dist/
+
+# Ultralytics caches
+*.cache
+*.pt.tmp
+
+# Tongue multi-feature dataset (large, downloaded separately — see docs/舌象多特征检测_数据下载与云端训练手册.md)
+backend/data/tcm_tongue_raw/
+backend/data/tcm_tongue/
+backend/data/tcm_tongue_stats.json
+backend/data/tcm_tongue*.zip

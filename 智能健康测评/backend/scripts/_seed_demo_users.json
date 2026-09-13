@@ -1,0 +1,55 @@
+{
+  "seeded_at": "2026-09-11T10:33:34",
+  "accounts": [
+    "zhangwei",
+    "lina",
+    "wangqiang",
+    "chenjing",
+    "liuyang",
+    "sunmeng"
+  ],
+  "created_accounts": [
+    "zhangwei",
+    "lina",
+    "wangqiang",
+    "chenjing",
+    "liuyang",
+    "sunmeng"
+  ],
+  "created_profile_user_ids": [
+    "zhangwei",
+    "lina",
+    "wangqiang",
+    "chenjing",
+    "liuyang",
+    "sunmeng"
+  ],
+  "assessment_ids": [
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52
+  ],
+  "passwords": {
+    "zhangwei": "zhang123",
+    "lina": "lina123",
+    "wangqiang": "wang123",
+    "chenjing": "chen123",
+    "liuyang": "liu123",
+    "sunmeng": "sun123"
+  }
+}

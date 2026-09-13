@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>HealthyBot 时序图与 LangGraph 详细联排</title>
+<style>
+  body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #2b2f2a; background: #f6f7f4; margin: 0; padding: 32px 20px 80px; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: 26px; border-bottom: 3px solid #526d4e; padding-bottom: 10px; }
+  h2 { font-size: 19px; color: #3d5239; margin-top: 44px; border-left: 5px solid #526d4e; padding-left: 12px; }
+  h3 { font-size: 15px; margin-top: 24px; }
+  .meta { color: #77806f; font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  th { background: #e8efe4; color: #33502f; text-align: left; padding: 9px 10px; border: 1px solid #d5ded0; }
+  td { padding: 8px 10px; border: 1px solid #e3e8df; vertical-align: top; line-height: 1.6; }
+  .card { background: #fff; border-radius: 8px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin: 14px 0; overflow-x: auto; }
+  code { background: #ecefe9; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .callout { background: #eef4ea; border: 1px solid #c8d8bf; border-radius: 8px; padding: 12px 16px; font-size: 13px; line-height: 1.7; margin: 12px 0; }
+  .pill { display: inline-block; background: #526d4e; color: #fff; border-radius: 12px; padding: 2px 12px; font-size: 12px; margin: 2px 4px 2px 0; }
+  .pill.alt { background: #98ad7d; } .pill.alt2 { background: #c9a36b; } .pill.alt3 { background: #7f8ea3; }
+  .flowline { font-size: 13px; line-height: 2; background: #fff; border: 1px dashed #b9c6b1; border-radius: 8px; padding: 12px 16px; margin: 10px 0; }
+  .arrow { color: #526d4e; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>HealthyBot 时序图 与 LangGraph 详细联排</h1>
+<p class="meta">依据源码 assistant_service.py / companion.py / knowledge_service.py / milvus_client.py / neo4j_client.py 整理 · 2026-09-11</p>
+
+<h2>一、时序图 ①：AI 智能问答全链路（核心链路）</h2>
+<div class="card"><pre class="mermaid">
+sequenceDiagram
+    autonumber
+    participant U as 用户
+    participant FE as Vue3 前端
+    participant API as FastAPI assistant 路由
+    participant SVC as assistant_service
+    participant LG as LangGraph 状态机
+    participant MV as Milvus 向量库
+    participant NJ as Neo4j 图谱
+    participant DB as MySQL
+    participant LLM as SiliconFlow DeepSeek
+
+    U->>FE: 输入消息
+    FE->>API: POST /api/assistant/chat (message, use_graph)
+    API->>API: JWT 中间件校验 token
+    API->>API: require_health_consent 未授权则返回 428
+    API->>SVC: chat()
+    SVC->>DB: 保存用户消息 / 提取画像与记忆
+    SVC->>SVC: 三级意图分流
+
+    alt 意图① 要饮食计划
+        SVC->>NJ: find_food_relations 排菜禁忌校验
+        SVC->>DB: upsert_plan 写 meal_plans
+        SVC->>LLM: _narrate_plan 把计划讲成话
+        SVC-->>FE: 计划卡片 + narration_source
+    else 意图② 记饮食
+        SVC->>LLM: parse_meal_text 抽取 JSON 草稿
+        SVC-->>FE: 待确认饮食草稿 (秒回不进图)
+    else 意图③ 普通健康问答
+        SVC->>SVC: route_agents 关键词路由生成 agent_plan
+        SVC->>LG: run_agent_workflow 动态建图
+        loop agent_plan 中每个专科 Agent (最多4步)
+            LG->>MV: search(message, top_k=5)
+            MV-->>LG: 知识库片段
+            LG->>NJ: _graph_context + reason_path 多跳推理
+            NJ-->>LG: 宜吃/忌口/推理链 (冲突时优先)
+            LG->>DB: 画像 + 长期记忆 + 近12条历史
+            LG->>LLM: system(角色+片段+图谱+交接) + user(message)
+            LLM-->>LG: 专科回答
+            LG->>LG: 输出追加进 agent_outputs (handoff)
+        end
+        LG-->>SVC: 最终 AgentRunState
+        SVC->>DB: persist_agent_run 落 runs/steps 表
+    end
+    SVC-->>FE: 回答 + agent_trace + sources + graph_enabled
+    FE->>U: 气泡渲染 + Agent 步骤回放 + 参考来源
+</pre></div>
+
+<h2>二、时序图 ②：多模态知识库入库</h2>
+<div class="card"><pre class="mermaid">
+sequenceDiagram
+    autonumber
+    participant A as 管理员
+    participant FE as 前端
+    participant K as knowledge_service
+    participant MIO as MinIO
+    participant DB as MySQL
+    participant P as document_parser
+    participant LLM as SiliconFlow OCR
+    participant MV as Milvus
+
+    A->>FE: 上传 pdf/docx/图片/txt
+    FE->>K: POST /api/knowledge/upload (admin)
+    K->>MIO: upload_bytes 存 health-knowledge 桶
+    K->>DB: 写 knowledge_files (status=parsing)
+    K->>P: parse_bytes
+    alt 图片文件
+        P->>LLM: ocr_image (DeepSeek-OCR 失败回退 Qwen3-VL)
+        LLM-->>P: 文字内容
+    else pdf/docx/txt
+        P->>P: pypdf / python-docx / 直接读取
+    end
+    P->>P: split_chunks 500字/80重叠 句边界切分
+    K->>MV: add_chunks 批量16条 bge-m3 向量化
+    MV-->>K: 写入 knowledge_chunks
+    K->>DB: status=done + chunk_count + 全文摘要
+    K-->>FE: 入库完成
+</pre></div>
+
+<h2>三、LangGraph 详细联排（重点）</h2>
+
+<h3>3.1 完整编排流程图</h3>
+<div class="card"><pre class="mermaid">
+flowchart TD
+    A["POST /api/assistant/chat"] --> B{"chat() 三级意图分流"}
+    B -->|"要计划"| P1["计划分支: upsert_plan + LLM复述"]
+    B -->|"记饮食"| P2["记饮食分支: parse_meal_text 抽JSON"]
+    B -->|"普通问答"| C["route_agents(message) 关键词路由"]
+    C --> D["产出 agent_plan 列表 (截断至 MAX_AGENT_STEPS=4)"]
+    D --> E["动态构建 StateGraph, 每个 plan 项生成一个 node"]
+    E --> S(["START"])
+    S --> N1["node① 第一个专科 Agent"]
+    N1 -->|"add_edge 顺序串联"| N2["node② 下一个专科 Agent"]
+    N2 --> N3["node③ ..."]
+    N3 --> N4["node④ 健康管理 Agent 收尾汇总 (多域时)"]
+    N4 --> E2(["END"])
+    E2 --> F["persist_agent_run: 全程落 assistant_agent_runs / steps"]
+    F --> G["返回: answer + agent_trace + sources"]
+    style A fill:#e8efe4,stroke:#526d4e
+    style S fill:#d9ded6,stroke:#888
+    style E2 fill:#d9ded6,stroke:#888
+    style N4 fill:#e6f1fb,stroke:#185fa5
+    style F fill:#fdf2d0,stroke:#ba9b2a
+</pre></div>
+
+<h3>3.2 路由规则：一句话怎么变成 Agent 编排</h3>
+<p>路由发生在<strong>进图之前</strong>（<code>route_agents()</code>，assistant_service.py 第 111 行），按固定顺序扫描关键词表：</p>
+<table>
+  <tr><th style="width:150px">Agent</th><th>命中关键词（ROUTE_KEYWORDS）</th><th style="width:130px">角色定位</th></tr>
+  <tr><td><b>营养师 Agent</b><br><code>nutrition</code></td><td>吃 / 饮食 / 营养 / 热量 / 食谱 / 蛋白 / 维生素 / 餐 / 减脂 / 减重 / 增肌</td><td>饮食与营养专科</td></tr>
+  <tr><td><b>运动 Agent</b><br><code>exercise</code></td><td>运动 / 步数 / 跑步 / 健身 / 心率 / 锻炼 / 训练</td><td>运动处方专科</td></tr>
+  <tr><td><b>睡眠 Agent</b><br><code>sleep</code></td><td>睡眠 / 睡不着 / 失眠 / 深睡 / 作息 / 熬夜</td><td>睡眠专科</td></tr>
+  <tr><td><b>健康管理 Agent</b><br><code>health</code></td><td>不设关键词——三种情况被启用（见下）</td><td>兜底 + 跨域汇总</td></tr>
+</table>
+<div class="callout">
+<b>plan 的三种形态：</b><br>
+<span class="pill">单域</span> 只命中一个领域 → plan = [该专科]（如只问"怎么减脂" → [nutrition]），健康管理 Agent 不参与<br>
+<span class="pill alt">多域</span> 命中 ≥2 个领域 → plan = [专科按固定顺序] + 追加 health 收尾汇总（如"减脂又失眠" → [nutrition, sleep, health]）<br>
+<span class="pill alt2">零命中兜底</span> 一个关键词都没中 → plan = [health]，由健康管理 Agent 独立作答
+</div>
+
+<h3>3.3 每个 Agent 节点内部：统一的 RAG 融合流水线</h3>
+<p>四种 Agent 的 node 函数是同一个模板（<code>run_node</code> → <code>_invoke_specialist</code>），只有角色人设和提示词不同：</p>
+<div class="flowline">
+① <b>Milvus 向量检索</b> <span class="arrow">→</span> 拿知识库 top5 片段，拼成「知识库参考」system 消息（模糊知识，仅供参考）<br>
+② <b>Neo4j 图谱推理</b> <span class="arrow">→</span> 用画像疾病 + 本轮消息做别名对齐（<code>_match_diseases</code>），再跑 <code>reason_path</code> 多跳推理：疾病 → 营养素 → 食物，产出宜吃/忌口/过敏剔除，拼成「结构化结论」system 消息，<b>与知识库片段冲突时图谱优先</b><br>
+③ <b>个性化上下文</b> <span class="arrow">→</span> 用户画像（目标/过敏/疾病）+ 长期记忆（allergy/condition/goal/preference 四类）+ 近 12 条会话历史<br>
+④ <b>一次 LLM 调用</b> <span class="arrow">→</span> system（角色人设 + ①②③ 内容 + 前序交接）+ user（本轮消息）→ 输出专科回答，附 <code>tool_calls</code> 与 <code>sources</code> 供前端展示
+</div>
+
+<h3>3.4 Agent 之间的关系：顺序接力 + 交接（handoff）</h3>
+<div class="card"><pre class="mermaid">
+flowchart LR
+    subgraph 前序交接机制
+        direction LR
+        A1["营养师 Agent<br/>输出: 每日蛋白建议"] -->|"agent_outputs 追加"| A2["睡眠 Agent<br/>system 里收到: 前序 Agent 交接: 营养师 Agent: ..."]
+        A2 -->|"agent_outputs 追加"| A3["健康管理 Agent<br/>读全部前序输出, 做跨域收口"]
+    end
+    style A1 fill:#e8efe4,stroke:#526d4e
+    style A2 fill:#e6f1fb,stroke:#185fa5
+    style A3 fill:#fdf2d0,stroke:#ba9b2a
+</pre></div>
+<table>
+  <tr><th style="width:190px">关系</th><th>机制说明（源码依据）</th></tr>
+  <tr><td>专科 → 专科</td><td>顺序 <code>add_edge</code> 直线串联，无并行、无循环；<code>StateGraph</code> 共享 <code>AgentRunState</code>，每个 node 把自己的输出追加进 <code>agent_outputs</code></td></tr>
+  <tr><td>前序 → 后序</td><td><b>handoff 交接</b>：后一个 Agent 的 system prompt 里拼入「前序 Agent 交接：营养师 Agent：……」（第 287-331 行），保证后序不重复劳动、结论连贯</td></tr>
+  <tr><td>专科 → 健康管理</td><td>多域问题时 health 排最后，读全部前序输出做<b>跨域汇总收口</b>（例如同时回应减脂与失眠的相互作用）；单域问题时 health 完全不出现</td></tr>
+  <tr><td>健康管理 ↔ 兜底</td><td>零命中时 health 单独成图作答，兼具「通用健康顾问」角色</td></tr>
+  <tr><td>全链 → 审计</td><td>无论几个 Agent，结束后 <code>persist_agent_run()</code> 把 plan、每步输出、tool_calls、sources 落 <code>assistant_agent_runs/steps</code> 两张表，前端可逐步回放</td></tr>
+</table>
+
+<h3>3.5 State 字段与防失控设计</h3>
+<table>
+  <tr><th style="width:170px"><code>AgentRunState</code> 字段</th><th>作用</th></tr>
+  <tr><td><code>message</code></td><td>本轮用户消息（全程不变）</td></tr>
+  <tr><td><code>profile</code></td><td>用户画像（目标/过敏/疾病/偏好），注入每个 Agent</td></tr>
+  <tr><td><code>history</code></td><td>近 12 条会话历史</td></tr>
+  <tr><td><code>agent_plan</code></td><td>路由产出的执行计划（进图前已定，图内不改动）</td></tr>
+  <tr><td><code>agent_outputs</code></td><td>累积输出列表，即 handoff 载体，也是最终 <code>agent_trace</code></td></tr>
+  <tr><td><code>step_count</code></td><td>步数计数（上限 MAX_AGENT_STEPS=4，plan 进图前截断）</td></tr>
+</table>
+<div class="callout">
+<b>为什么说是「有界」状态机：</b> 没有使用 <code>add_conditional_edges</code> 的图内动态分支，而是「先规划后执行」——路由、截断都在进图前完成，图内只有一条直线。好处：① Agent 数量有硬上限（4），LLM 调用次数可预估（≤4 次）；② 不会出现 Agent 互相踢皮球的死循环；③ 执行路径完全可预测、可审计、可回放。代价：牺牲了图内动态决策的灵活性——这是面向答辩可讲的设计取舍。
+</div>
+</div>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs'
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' })
+</script>
+</body>
+</html>

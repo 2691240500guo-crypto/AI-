@@ -1,0 +1,446 @@
+{
+  "01_健康食物搭配核心原则.md": {
+    "food_nutrient": [
+      {
+        "food": "菠菜",
+        "nutrient": "铁",
+        "note": "含铁丰富的菠菜"
+      },
+      {
+        "food": "木耳",
+        "nutrient": "铁",
+        "note": "含铁丰富的木耳"
+      },
+      {
+        "food": "红豆",
+        "nutrient": "铁",
+        "note": "含铁丰富的红豆"
+      },
+      {
+        "food": "番茄",
+        "nutrient": "维生素C",
+        "note": "富含维生素C的番茄"
+      },
+      {
+        "food": "胡萝卜",
+        "nutrient": "胡萝卜素",
+        "note": "胡萝卜中的胡萝卜素"
+      },
+      {
+        "food": "南瓜",
+        "nutrient": "胡萝卜素",
+        "note": "南瓜中的胡萝卜素"
+      },
+      {
+        "food": "西兰花",
+        "nutrient": "胡萝卜素",
+        "note": "西兰花中的胡萝卜素"
+      }
+    ],
+    "nutrient_disease": [],
+    "food_disease": []
+  },
+  "02_高蛋白饮食搭配方案.md": {
+    "food_nutrient": [
+      {
+        "food": "鸡蛋",
+        "nutrient": "蛋白质",
+        "note": "一个中等大小鸡蛋约含6到7克蛋白质"
+      },
+      {
+        "food": "鸡胸肉",
+        "nutrient": "蛋白质",
+        "note": "每100克约含蛋白质20到24克"
+      },
+      {
+        "food": "深海鱼",
+        "nutrient": "蛋白质",
+        "note": "每100克约含蛋白质18到20克"
+      },
+      {
+        "food": "深海鱼",
+        "nutrient": "omega-3脂肪酸",
+        "note": "同时提供omega-3脂肪酸"
+      },
+      {
+        "food": "牛肉",
+        "nutrient": "蛋白质",
+        "note": "每100克约含蛋白质20克左右"
+      },
+      {
+        "food": "牛肉",
+        "nutrient": "铁",
+        "note": "富含血红素铁和锌，铁为血红素铁"
+      },
+      {
+        "food": "牛肉",
+        "nutrient": "锌",
+        "note": "富含血红素铁和锌"
+      },
+      {
+        "food": "北豆腐",
+        "nutrient": "蛋白质",
+        "note": "每100克约含蛋白质12到15克"
+      },
+      {
+        "food": "无糖豆浆",
+        "nutrient": "蛋白质",
+        "note": "每250毫升约含7克蛋白质"
+      },
+      {
+        "food": "无糖希腊酸奶",
+        "nutrient": "蛋白质",
+        "note": "每100克约含蛋白质9到10克"
+      },
+      {
+        "food": "普通无糖酸奶",
+        "nutrient": "蛋白质",
+        "note": "普通无糖酸奶约3到4克蛋白质"
+      },
+      {
+        "food": "鸡胸肉",
+        "nutrient": "维生素B6",
+        "note": "鸡胸肉本身也富含B6"
+      }
+    ],
+    "nutrient_disease": [
+      {
+        "nutrient": "膳食纤维",
+        "relation": "降低风险",
+        "disease": "便秘",
+        "note": "避免便秘"
+      }
+    ],
+    "food_disease": []
+  },
+  "03_糖尿病饮食搭配方案.md": {
+    "food_nutrient": [],
+    "nutrient_disease": [],
+    "food_disease": []
+  },
+  "04_睡眠与饮食搭配建议.md": {
+    "food_nutrient": [],
+    "nutrient_disease": [],
+    "food_disease": []
+  },
+  "05_维生素与矿物质吸收搭配.md": {
+    "food_nutrient": [
+      {
+        "food": "牛奶",
+        "nutrient": "钙",
+        "note": "富含钙的食物包括牛奶"
+      },
+      {
+        "food": "酸奶",
+        "nutrient": "钙",
+        "note": "富含钙的食物包括酸奶"
+      },
+      {
+        "food": "豆腐",
+        "nutrient": "钙",
+        "note": "富含钙的食物包括豆腐"
+      },
+      {
+        "food": "芝麻酱",
+        "nutrient": "钙",
+        "note": "富含钙的食物包括芝麻酱"
+      },
+      {
+        "food": "小鱼干",
+        "nutrient": "钙",
+        "note": "富含钙的食物包括小鱼干"
+      },
+      {
+        "food": "芥蓝",
+        "nutrient": "钙",
+        "note": "富含钙的食物包括芥蓝"
+      },
+      {
+        "food": "三文鱼",
+        "nutrient": "维生素D",
+        "note": "富含维生素D的主要是三文鱼"
+      },
+      {
+        "food": "沙丁鱼",
+        "nutrient": "维生素D",
+        "note": "富含维生素D的主要是沙丁鱼"
+      },
+      {
+        "food": "蛋黄",
+        "nutrient": "维生素D",
+        "note": "富含维生素D的主要是蛋黄"
+      },
+      {
+        "food": "干香菇",
+        "nutrient": "维生素D",
+        "note": "富含维生素D的主要是干香菇"
+      },
+      {
+        "food": "牡蛎",
+        "nutrient": "锌",
+        "note": "富含锌的食物包括牡蛎"
+      },
+      {
+        "food": "牛肉",
+        "nutrient": "锌",
+        "note": "富含锌的食物包括牛肉"
+      },
+      {
+        "food": "南瓜子",
+        "nutrient": "锌",
+        "note": "富含锌的食物包括南瓜子"
+      },
+      {
+        "food": "芝麻",
+        "nutrient": "锌",
+        "note": "富含锌的食物包括芝麻"
+      },
+      {
+        "food": "腰果",
+        "nutrient": "锌",
+        "note": "富含锌的食物包括腰果"
+      },
+      {
+        "food": "全谷物",
+        "nutrient": "维生素B1",
+        "note": "维生素B1来源包括全谷物"
+      },
+      {
+        "food": "瘦猪肉",
+        "nutrient": "维生素B1",
+        "note": "维生素B1来源包括瘦猪肉"
+      },
+      {
+        "food": "豆类",
+        "nutrient": "维生素B1",
+        "note": "维生素B1来源包括豆类"
+      },
+      {
+        "food": "深绿色叶菜",
+        "nutrient": "叶酸",
+        "note": "叶酸来源包括深绿色叶菜"
+      },
+      {
+        "food": "豆类",
+        "nutrient": "叶酸",
+        "note": "叶酸来源包括豆类"
+      },
+      {
+        "food": "动物肝脏",
+        "nutrient": "叶酸",
+        "note": "叶酸来源包括动物肝脏"
+      }
+    ],
+    "nutrient_disease": [],
+    "food_disease": []
+  },
+  "06_减脂与增肌人群搭配方案.md": {
+    "food_nutrient": [
+      {
+        "food": "鸡胸肉",
+        "nutrient": "蛋白质",
+        "note": "每餐保证一份优质蛋白，例如鸡胸肉"
+      },
+      {
+        "food": "鱼虾",
+        "nutrient": "蛋白质",
+        "note": "每餐保证一份优质蛋白，例如鱼虾"
+      },
+      {
+        "food": "鸡蛋",
+        "nutrient": "蛋白质",
+        "note": "每餐保证一份优质蛋白，例如鸡蛋"
+      },
+      {
+        "food": "豆腐",
+        "nutrient": "蛋白质",
+        "note": "每餐保证一份优质蛋白，例如豆腐"
+      },
+      {
+        "food": "无糖酸奶",
+        "nutrient": "蛋白质",
+        "note": "每餐保证一份优质蛋白，例如无糖酸奶"
+      },
+      {
+        "food": "蔬菜",
+        "nutrient": "膳食纤维",
+        "note": "每餐保证两份以上的蔬菜，以增加膳食纤维"
+      }
+    ],
+    "nutrient_disease": [],
+    "food_disease": []
+  },
+  "07_高血压与心血管人群搭配方案.md": {
+    "food_nutrient": [
+      {
+        "food": "香蕉",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括香蕉"
+      },
+      {
+        "food": "橙子",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括橙子"
+      },
+      {
+        "food": "菠菜",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括菠菜"
+      },
+      {
+        "food": "土豆",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括土豆"
+      },
+      {
+        "food": "红薯",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括红薯"
+      },
+      {
+        "food": "菌菇",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括菌菇"
+      },
+      {
+        "food": "豆类",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括豆类"
+      },
+      {
+        "food": "牛油果",
+        "nutrient": "钾",
+        "note": "富含钾的食物包括牛油果"
+      },
+      {
+        "food": "橄榄油",
+        "nutrient": "不饱和脂肪酸",
+        "note": "不饱和脂肪酸来源包括橄榄油"
+      },
+      {
+        "food": "亚麻籽油",
+        "nutrient": "不饱和脂肪酸",
+        "note": "不饱和脂肪酸来源包括亚麻籽油"
+      },
+      {
+        "food": "深海鱼",
+        "nutrient": "不饱和脂肪酸",
+        "note": "不饱和脂肪酸来源包括深海鱼"
+      },
+      {
+        "food": "核桃",
+        "nutrient": "不饱和脂肪酸",
+        "note": "不饱和脂肪酸来源包括核桃"
+      },
+      {
+        "food": "杏仁",
+        "nutrient": "不饱和脂肪酸",
+        "note": "不饱和脂肪酸来源包括杏仁"
+      },
+      {
+        "food": "芝麻",
+        "nutrient": "不饱和脂肪酸",
+        "note": "不饱和脂肪酸来源包括芝麻"
+      },
+      {
+        "food": "酱油",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括酱油"
+      },
+      {
+        "food": "蚝油",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括蚝油"
+      },
+      {
+        "food": "豆瓣酱",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括豆瓣酱"
+      },
+      {
+        "food": "咸菜",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括咸菜"
+      },
+      {
+        "food": "腊肉",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括腊肉"
+      },
+      {
+        "food": "香肠",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括香肠"
+      },
+      {
+        "food": "方便面调料包",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括方便面调料包"
+      },
+      {
+        "food": "话梅",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括话梅"
+      },
+      {
+        "food": "苏打饼干",
+        "nutrient": "钠",
+        "note": "隐形钠来源包括部分苏打饼干"
+      }
+    ],
+    "nutrient_disease": [
+      {
+        "nutrient": "钾",
+        "relation": "降低风险",
+        "disease": "高血压",
+        "note": "钾有助于促进钠排出，对血压管理有帮助"
+      },
+      {
+        "nutrient": "不饱和脂肪酸",
+        "relation": "降低风险",
+        "disease": "高血脂",
+        "note": "不饱和脂肪酸有助于改善血脂"
+      }
+    ],
+    "food_disease": []
+  },
+  "08_常见搭配误区与说明.md": {
+    "food_nutrient": [
+      {
+        "food": "豆腐",
+        "nutrient": "钙",
+        "note": "豆腐中的钙依然能被较好吸收"
+      },
+      {
+        "food": "土豆",
+        "nutrient": "碳水化合物",
+        "note": "属于主食类碳水"
+      },
+      {
+        "food": "米饭",
+        "nutrient": "碳水化合物",
+        "note": "属于主食类碳水"
+      }
+    ],
+    "nutrient_disease": [],
+    "food_disease": [
+      {
+        "food": "动物内脏",
+        "relation": "禁忌",
+        "disease": "痛风",
+        "note": "痛风急性期应限制高嘌呤食物"
+      },
+      {
+        "food": "浓肉汤",
+        "relation": "禁忌",
+        "disease": "痛风",
+        "note": "痛风急性期应限制高嘌呤食物"
+      }
+    ]
+  },
+  "09_一周健康三餐搭配示例.md": {
+    "food_nutrient": [],
+    "nutrient_disease": [],
+    "food_disease": []
+  }
+}

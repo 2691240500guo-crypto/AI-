@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>HealthyBot 需求评审报告</title>
+<style>
+  body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; color: #2b2f2a; background: #f6f7f4; margin: 0; padding: 32px 20px 80px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 26px; border-bottom: 3px solid #526d4e; padding-bottom: 10px; }
+  h2 { font-size: 19px; color: #3d5239; margin-top: 40px; border-left: 5px solid #526d4e; padding-left: 12px; }
+  h3 { font-size: 15px; margin-top: 24px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; font-size: 13px; margin: 12px 0; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  th { background: #e8efe4; color: #33502f; text-align: left; padding: 9px 10px; border: 1px solid #d5ded0; }
+  td { padding: 8px 10px; border: 1px solid #e3e8df; vertical-align: top; line-height: 1.6; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .ok { background: #dff0d5; color: #2e6b1e; }
+  .part { background: #fdf2d0; color: #8a6d00; }
+  .risk { background: #fbe3e0; color: #a33227; }
+  .p0 { background: #526d4e; color: #fff; }
+  .p1 { background: #98ad7d; color: #fff; }
+  .p2 { background: #d9ded6; color: #555; }
+  .meta { color: #77806f; font-size: 13px; }
+  .callout { background: #eef4ea; border: 1px solid #c8d8bf; border-radius: 8px; padding: 12px 16px; font-size: 13px; line-height: 1.7; margin: 12px 0; }
+  .warn { background: #fdf4e3; border: 1px solid #ecd9a8; }
+  code { background: #ecefe9; padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card { background: #fff; border-radius: 8px; padding: 14px 18px; box-shadow: 0 1px 3px rgba(0,0,0,.06); font-size: 13px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>HealthyBot 智能健康测评 · 需求评审报告</h1>
+<p class="meta">评审对象：D:\项目阶段\项目实操\智能健康测评（FastAPI + Vue3 + MySQL + MinIO + Milvus + Neo4j + SiliconFlow + LangGraph）· 评审日期：2026-09-11 · 评审人：小爪 🐾</p>
+
+<h2>一、项目概述与业务域</h2>
+<div class="callout">
+HealthyBot 是一款面向 C 端用户的智能健康管理应用，围绕「测评 → 记录 → 问答 → 报告」闭环展开。后端 9 大路由模块（<code>main.py</code>）对应 9 个业务域，AI 能力统一经 SiliconFlow 出口，多模态知识（向量 + 图谱）双源融合。
+</div>
+<table>
+  <tr><th style="width:130px">业务域</th><th>核心需求</th><th style="width:90px">优先级</th><th style="width:110px">实现状态</th></tr>
+  <tr><td>登录鉴权</td><td>账号登录、JWT 中间件、角色区分（user/admin）、6 个演示账号</td><td><span class="tag p0">P0</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>NRS2002 营养测评</td><td>量表作答、规则引擎评分（纯 Python）、风险分级、LLM 报告增强、报告落库加密</td><td><span class="tag p0">P0</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>AI 智能问答</td><td>多 Agent 编排（LangGraph）、RAG 融合检索、图谱增强（请求级开关）、长期记忆、执行留痕回放</td><td><span class="tag p0">P0</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>饮食计划</td><td>结构化计划生成、图谱禁忌校验、LLM 复述（narration_source 标注）、人工审核流</td><td><span class="tag p0">P0</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>记饮食</td><td>拍照识别（视觉模型估热量）、文本一句话抽取、日汇总</td><td><span class="tag p1">P1</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>多模态知识库</td><td>多格式上传解析（pdf/docx/图片OCR）、切分向量化入库、语义检索</td><td><span class="tag p1">P1</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>营养知识图谱</td><td>三类节点五类关系、多跳推理（宜吃/忌口/过敏剔除）、可视化、增量补齐</td><td><span class="tag p1">P1</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>舌象观察</td><td>YOLO 14 类特征检测、可信度分档闸门、加密存储、趋势观察（非诊断）</td><td><span class="tag p1">P1</span></td><td><span class="tag part">部分实现</span></td></tr>
+  <tr><td>健康周报/月报</td><td>跨表聚合报告、Redis 缓存、柱状图/饼图可视化、小萌宠陪伴</td><td><span class="tag p2">P2</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>社区广场</td><td>发帖/评论/点赞/关注、图床、图片机审（视觉）+ 文本机审（词库）</td><td><span class="tag p2">P2</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>隐私合规</td><td>健康数据授权（428 拦截）、字段级 AES-256-GCM 加密、数据导出/删除（outbox）</td><td><span class="tag p0">P0</span></td><td><span class="tag ok">已实现</span></td></tr>
+  <tr><td>运营总览</td><td>跨 10+ 表聚合统计、缓存、计划人工审核</td><td><span class="tag p2">P2</span></td><td><span class="tag ok">已实现</span></td></tr>
+</table>
+
+<h2>二、非功能需求评审</h2>
+<table>
+  <tr><th style="width:120px">维度</th><th>需求与现状</th><th style="width:110px">评价</th></tr>
+  <tr><td>安全</td><td>JWT 全局中间件 + 管理员白名单；敏感字段（病情/聊天/测评依据）AES-256-GCM 应用层加密；舌象图客户端加密存私有桶</td><td><span class="tag ok">达标</span></td></tr>
+  <tr><td>隐私合规</td><td>健康数据授权前置（<code>require_health_consent</code>，未授权 428）；数据导出/删除走 outbox 任务可靠执行</td><td><span class="tag ok">达标</span></td></tr>
+  <tr><td>性能</td><td>报告 120s Redis 缓存、图谱别名匹配 60s / 关系映射 90s 缓存、运营总览 15s 缓存</td><td><span class="tag ok">达标</span></td></tr>
+  <tr><td>可靠性</td><td>LLM 各调用点均有本地兜底（模板/规则/fallback 文案）；图谱挂掉有 <code>DISEASE_AVOID_KEYWORDS</code> 词表兜底</td><td><span class="tag ok">达标</span></td></tr>
+  <tr><td>可审计</td><td>LangGraph 每步落 <code>assistant_agent_runs/steps</code> 表，前端可回放</td><td><span class="tag ok">亮点</span></td></tr>
+  <tr><td>措辞合规</td><td>全链路「观察参考、非诊断」免责声明；舌象只输出「特征观察」</td><td><span class="tag ok">达标</span></td></tr>
+</table>
+
+<h2>三、评审发现：亮点</h2>
+<div class="two">
+  <div class="card"><b>① 双知识源分层融合</b><br>Milvus 管「模糊知识」（文档片段），Neo4j 管「确定规则」（宜忌三元组），prompt 层融合且明确「图谱结论优先」——比单一 RAG 更适合健康场景的严肃性要求。</div>
+  <div class="card"><b>② 有界状态机</b><br>LangGraph 采用「先规划后执行」（进图前路由、最多 4 步、一条直线），规避了 Agent 无限循环/失控调用，可控可测。</div>
+  <div class="card"><b>③ 能力边界诚实</b><br>舌象 14 类特征带可信度分档（high/medium/low/unusable），不可信特征不进结论只进明细——这是 AI 产品里难得的自我声明机制。</div>
+  <div class="card"><b>④ 禁忌规则即代码即数据</b><br>图谱从代码常量 MERGE 幂等灌入，「加一条禁忌边即生效」，且 <code>(食物)-[:含有]-&gt;(营养素)-[降低风险]-&gt;(疾病)</code> 两跳自动推理，扩展成本低。</div>
+</div>
+
+<h2>四、评审发现：风险与待改进项</h2>
+<table>
+  <tr><th style="width:60px">编号</th><th>问题</th><th style="width:90px">等级</th><th>建议</th></tr>
+  <tr><td>R-01</td><td>舌象「暗红（紫舌）」类召回为 0，产品已声明不可用并排除出结论，但数据集侧无短期修复路径</td><td><span class="tag part">中</span></td><td>维持现状 + 前端角标；长期等 TongueDx 的 Purple 标注或临床样本</td></tr>
+  <tr><td>R-02</td><td>意图路由是关键词表（<code>ROUTE_KEYWORDS</code>），复杂表达可能漏路由（如"晚上总醒"不含"睡眠"）</td><td><span class="tag part">中</span></td><td>答辩可讲成「低成本高可控」；后续可加 LLM 兜底路由（一次低成本分类调用）</td></tr>
+  <tr><td>R-03</td><td>图谱数据为人工预置常量（约 40 食物/20 营养素/15 疾病），覆盖面有限，与知识库文档不互通</td><td><span class="tag part">中</span></td><td>已有 <code>build_graph_from_llm.py</code> 扩谱脚本；答辩口径为「人工审核保证严肃性，工具支持扩展」</td></tr>
+  <tr><td>R-04</td><td>多 Agent 顺序执行，跨域问题耗时随 Agent 数线性增长（每个 Agent 一次 LLM 调用）</td><td><span class="tag part">中</span></td><td>前端已有步骤回放缓解等待感知；可考虑并行无依赖 Agent（需评估 handoff 语义）</td></tr>
+  <tr><td>R-05</td><td>周报/月报 Redis 缓存 120s，演示时刚记录的数据可能不立即反映</td><td><span class="tag risk">低</span></td><td>演示前预热数据；或记录成功后主动失效对应缓存键</td></tr>
+  <tr><td>R-06</td><td>社区文本机审是本地红线词库（非 LLM），变体绕过能力弱</td><td><span class="tag risk">低</span></td><td>图片已走视觉机审；文本可后续升级为 LLM 审核，当前够用</td></tr>
+  <tr><td>R-07</td><td>NRS2002 评分是规则引擎非 LLM——答辩话术若说成"AI 打分"属于事实错误</td><td><span class="tag risk">低</span></td><td>统一口径：规则引擎评分（可解释、可复现），LLM 仅做报告增强</td></tr>
+</table>
+
+<h2>五、评审结论</h2>
+<div class="callout">
+<b>结论：通过（有条件）。</b> 12 个业务域中 10 个已实现且经测试验证（<code>pytest 11 passed</code>、<code>vite build</code> 通过、端到端接口实测覆盖），核心链路（测评/问答/计划/图谱）具备答辩演示条件。条件项：① 演示前按 R-05 预热周报数据；② 话术统一 R-07 的技术边界；③ 舌象演示避开「暗红」特征或主动讲解能力边界（本身即是加分项）。
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+path: data/tongue_dataset
+train: train/images
+val: val/images
+test: test/images
+
+names:
+  0: tongue
