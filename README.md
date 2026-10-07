@@ -1,4 +1,4 @@
 # AI-
-欢迎各个大神和高手交流指导
+欢迎大家交流指导
 [README.md](https://github.com/user-attachments/files/32157268/README.md)
 
